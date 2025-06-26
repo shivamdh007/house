@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Boston House Price Predictor</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 40px 10px;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    form {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+      color: #444;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      transition: 0.3s ease;
+    }
+
+    input:focus {
+      border-color: #007bff;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 25px;
+      padding: 12px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      color: green;
+      text-align: center;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+
+    <title>Boston Housing Price Prediction</title>
+<body>
+    <h2>Boston Housing Price Prediction</h2>
+    <form action="/predict" method="post">
+
+        <label>CRIM:</label><br>
+        <input type="text" name="CRIM"><br>
+
+        <label>ZN:</label><br>
+        <input type="text" name="ZN"><br>
+
+        <label>INDUS:</label><br>
+        <input type="text" name="INDUS"><br>
+
+        <label>CHAS:</label><br>
+        <input type="text" name="CHAS"><br>
+
+        <label>NOX:</label><br>
+        <input type="text" name="NOX"><br>
+
+        <label>RM:</label><br>
+        <input type="text" name="RM"><br>
+
+        <label>AGE:</label><br>
+        <input type="text" name="AGE"><br>
+
+        <label>DIS:</label><br>
+        <input type="text" name="DIS"><br>
+
+        <label>RAD:</label><br>
+        <input type="text" name="RAD"><br>
+
+        <label>TAX:</label><br>
+        <input type="text" name="TAX"><br>
+
+        <label>PTRATIO:</label><br>
+        <input type="text" name="PTRATIO"><br>
+
+        <label>B:</label><br>
+        <input type="text" name="B"><br>
+
+        <label>LSTAT:</label><br>
+        <input type="text" name="LSTAT"><br>
+
+        <br>
+        <input type="submit" value="Predict">
+
+    </form>
+
+    {% if prediction_text %}
+        <h3>{{ prediction_text }}</h3>
+    {% endif %}
+
+</body>
+</html>
+
+  <footer>
+  
+  </footer>
+
+  <script>
+    const form = document.getElementById('predict-form');
+    const resultDiv = document.getElementById('result');
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const data = {
+        crim: parseFloat(document.getElementById('crim').value),
+        zn: parseFloat(document.getElementById('zn').value),
+        indus: parseFloat(document.getElementById('indus').value),
+        chas: parseInt(document.getElementById('chas').value),
+        nox: parseFloat(document.getElementById('nox').value),
+        rm: parseFloat(document.getElementById('rm').value),
+        age: parseFloat(document.getElementById('age').value),
+        dis: parseFloat(document.getElementById('dis').value),
+        rad: parseInt(document.getElementById('rad').value),
+        tax: parseInt(document.getElementById('tax').value),
+        ptratio: parseFloat(document.getElementById('ptratio').value),
+        b: parseFloat(document.getElementById('b').value),
+        lstat: parseFloat(document.getElementById('lstat').value)
+      };
+
+      try {
+        const response = await fetch('http://localhost:5000/predict', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+        resultDiv.textContent = `Predicted Price: $${result.predicted_price.toFixed(2)}k`;
+      } catch (error) {
+        resultDiv.textContent = 'Error: Could not fetch prediction.';
+      }
+    });
+  </script>
+</body>
+</html>
